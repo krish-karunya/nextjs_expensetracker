@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Expense Tracker API Details :
 
-## Getting Started
+## AuthRoute :(API Folder)=>(`api/auth/route.js`)
 
-First, run the development server:
+- `/login`
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- `/signUp`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- `/logout`
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## UserRoute :(`api/user/route.js`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `user/profile`
 
-## Learn More
+- `user/profile/update`
 
-To learn more about Next.js, take a look at the following resources:
+## Expense API (`api/expense/route.js`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `GET /api/expenses:` Get all expenses for logged-in user
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `POST /api/expenses:` Add a new expense
 
-## Deploy on Vercel
+- `PUT /api/expenses/:id:` Update an expense
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `DELETE /api/expenses/:id:` Delete an expense
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `GET /api/expenses/stats:` Summary for graphs
+
+## Income API (`api/income/route.js`)
+
+- `GET /api/income:` Get all income for logged-in user
+
+- `POST /api/income:` Add a new income
+
+- `PUT /api/income/:id:` Update an income
+
+- `DELETE /api/income/:id:` Delete an income
+
+- `GET /api/income/stats:` Summary for graphs
+
+## category API(`api/category/route.js`)
+
+- `GET /api/category` Get all the category
+
+- `POST /api/category` Create category
+
+- `DELETE /api/category` Delete category
+
+- `PUT /api/category` Update category
+
+# `Stack Justification :`
+
+- `Nextjs` - To Build the Fullstack
+- `Next-Auth` - authentication
+- `TailwindCss`- Styling
+- `mongoDB` - database to store all the data
+- `React hook form and Zod` - for validating the form
+- `Rechart` - To show chart view(It is simple and responsive)
+- `useContext or Zustand` - Global store
