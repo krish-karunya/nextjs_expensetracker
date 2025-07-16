@@ -1,12 +1,14 @@
 import { connectDB } from "@/db/connectDB";
+import { getUserFromCookie } from "@/lib/getUserFromCookie";
 import { Category } from "@/model/Category";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
+    const user = await getUserFromCookie();
     await connectDB();
-    const categoryList = await Category.find({});
+    const categoryList = await Category.find();
     return NextResponse.json({ category: categoryList });
   } catch (error) {
     console.log("error is from Category GET fn");
@@ -17,10 +19,10 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { name, userId, emoji } = await req.json();
+    const { name, userId, categoryType, emoji } = await req.json();
 
     //  checking the all the is valid or not
-    if (!name || !userId || !emoji) {
+    if (!name || !userId || !emoji || !categoryType) {
       return NextResponse.json(
         { success: false, message: "All the field is required" },
         { status: 400 }
@@ -35,10 +37,22 @@ export async function POST(req) {
       );
     }
 
+    // Validating Category Type :
+
+    const validCategory = ["income", "expense"];
+
+    if (!validCategory.includes(categoryType)) {
+      return NextResponse.json(
+        { success: false, message: "categoryType must be income or expense" },
+        { status: 400 }
+      );
+    }
+
     const newCategory = new Category({
       name,
       userId,
       emoji,
+      categoryType,
     });
 
     await newCategory.save();

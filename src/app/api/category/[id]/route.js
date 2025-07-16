@@ -36,7 +36,7 @@ export async function GET(request, { params }) {
 export async function PUT(req, { params }) {
   const { id: categoryId } = await params;
   const category = await req.json();
-  console.log(category);
+  // console.log(category);
 
   try {
     await connectDB();
@@ -98,7 +98,7 @@ export async function DELETE(request, { params }) {
 
     return NextResponse.json({
       success: true,
-      message: "Category Deleted Successfully",
+      message: ` ${deleteCategory.name} Category Deleted Successfully`,
     });
   } catch (error) {
     console.log("error is from Category DELETE fn");

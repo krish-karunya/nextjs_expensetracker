@@ -4,22 +4,22 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-const Header = () => {
+const Header = ({ isOpen, setIsOpen }) => {
   return (
     <div className="flex items-center justify-between p-5 bg-indigo-100 shadow-lg">
       <div className="font-bold text-gray-600">
         <p className="bg-gradient-to-r border-indigo-800  to-violet-800 bg-clip-text text-3xl font-bold leading-tight tracking-tighter text-transparent flex items-center gap-2">
           <motion.svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="lucide  lucide-piggy-bank stroke h-11 w-11 stroke-indigo-700 stroke-[1.5]"
+            className="lucide  lucide-piggy-bank stroke  stroke-indigo-700 stroke-[1.5] "
             animate={{ y: [0, -5, 0] }} // Bounce: up and down
             transition={{
               duration: 1,
@@ -35,11 +35,11 @@ const Header = () => {
           <span className="hidden md:block"> BudgetTracker</span>
         </p>
       </div>
-      <div className="flex items-center gap-4">
-        <Button className="bg-indigo-600 hover:bg-indigo-800">
-          {" "}
-          <Link href={"/signup"}>Sign up</Link>
-        </Button>
+      <div
+        className="flex items-center gap-4"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Button className="bg-indigo-600 hover:bg-indigo-800">Sign up</Button>
 
         <Button variant={"outline"}>Login</Button>
       </div>

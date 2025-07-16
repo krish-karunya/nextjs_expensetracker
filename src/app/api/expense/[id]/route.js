@@ -29,8 +29,8 @@ export async function GET(request, { params }) {
 
 // To Update the Existing expenses using expenseID :
 export async function PUT(req, { params }) {
-  const { id: expenseId } = params;
-  const updatedExpense = await req.json();
+  const { id: expenseId } = await params;
+  let updatedExpense = await req.json();
   try {
     await connectDB();
 
@@ -42,8 +42,17 @@ export async function PUT(req, { params }) {
       );
     }
 
+    // User Not allow to edit Date :
+    if (updatedExpense.date) {
+      return NextResponse.json({
+        success: false,
+        message: "Date field not allowed to edit",
+      });
+    }
+
     //  Let's find the old Expense :
     const oldExpense = await Expense.findById(expenseId);
+    // console.log("old expense", oldExpense);
 
     if (!oldExpense) {
       return NextResponse.json(
@@ -55,55 +64,52 @@ export async function PUT(req, { params }) {
       );
     }
 
-    let oldDate = new Date(oldExpense.date);
-    let oldAmount = oldExpense.amount;
-    let oldDay = oldDate.getDate();
-    let oldMonth = oldDate.getMonth() + 1;
-    let oldYear = oldDate.getFullYear();
+    // let oldDate = new Date(oldExpense.date);
+    let oldAmount = Number(oldExpense.amount);
+    // console.log("old Amount", oldAmount);
 
-    const updateDate = new Date(updatedExpense.date);
-    let newAmount = updateDate.amount;
-    let newDay = updateDate.getDate();
-    let newMonth = updateDate.getMonth() + 1;
-    let newYear = updateDate.getFullYear();
+    // const updateDate = new Date(updatedExpense.date);
+    let newAmount = Number(updatedExpense.amount);
 
-    // Revert old expense amount from old month history
-    await MonthHistory.findOneAndUpdate(
-      {
-        userId: oldExpense.userId,
-        year: oldYear,
-        month: oldMonth,
-        date: oldDay,
-      },
-      { $inc: { expense: -oldAmount } }
-    );
+    if (newAmount) {
+      // Revert old expense amount from old month history
+      await MonthHistory.findOneAndUpdate(
+        {
+          userId: oldExpense.userId,
+          year: oldExpense.year,
+          month: oldExpense.month,
+          date: oldExpense.date,
+        },
+        { $inc: { expense: -oldAmount } }
+      );
 
-    //  Add new expense amount to new month history (upsert in case not exists)
-    await MonthHistory.findOneAndUpdate(
-      {
-        userId: oldExpense.userId,
-        year: newYear,
-        month: newMonth,
-        date: newDay,
-      },
-      { $inc: { expense: newAmount } },
-      { upsert: true, new: true }
-    );
+      //  Add new expense amount to new month history (upsert in case not exists)
+      await MonthHistory.findOneAndUpdate(
+        {
+          userId: oldExpense.userId,
+          year: oldExpense.year,
+          month: oldExpense.month,
+          date: oldExpense.date,
+        },
+        { $inc: { expense: newAmount } },
+        { upsert: true, new: true }
+      );
 
-    //  Revert old expense amount from old year history
-    await YearHistory.findOneAndUpdate(
-      { userId: oldExpense.userId, year: oldYear },
-      { $inc: { expense: -oldAmount } }
-    );
+      //  Revert old expense amount from old year history
+      await YearHistory.findOneAndUpdate(
+        { userId: oldExpense.userId, year: oldExpense.year },
+        { $inc: { expense: -oldAmount } }
+      );
 
-    // Add new expense amount to new year history
-    await YearHistory.findOneAndUpdate(
-      { userId: expense.userId, year: newYear },
-      { $inc: { expense: newAmount } },
-      { upsert: true, new: true }
-    );
+      // Add new expense amount to new year history
+      await YearHistory.findOneAndUpdate(
+        { userId: oldExpense.userId, year: oldExpense.year },
+        { $inc: { expense: newAmount } },
+        { upsert: true, new: true }
+      );
+    }
 
-    const expense = await Expense.findByIdAndUpdate(
+    let expense = await Expense.findByIdAndUpdate(
       { _id: expenseId },
       updatedExpense,
       { new: true }
@@ -122,14 +128,15 @@ export async function PUT(req, { params }) {
       updatedExpense: expense,
     });
   } catch (error) {
-    console.log("error is from Expense PUT fn");
+    console.log("error is from Expense PUT fn", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
+
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const { id: expenseId } = params;
+    const { id: expenseId } = await params;
 
     // Check the ID is valid or not :
     if (!mongoose.Types.ObjectId.isValid(expenseId)) {
@@ -174,6 +181,7 @@ export async function DELETE(request, { params }) {
       },
       { $inc: { expense: -expenseData.expense } }
     );
+
     // Delete from Year History :
     await YearHistory.findOneAndUpdate(
       {
@@ -189,7 +197,7 @@ export async function DELETE(request, { params }) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("error is from Expense DELETE fn");
+    console.log("error is from Expense DELETE fn", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

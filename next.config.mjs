@@ -1,14 +1,33 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      "encrypted-tbn0.gstatic.com",
-      "wallpapercat.com",
-      "pbs.twimg.com",
-      "process.fs.teachablecdn.com",
-      "pbs.twimg.com",
-      "img.freepik.com",
-    ], // Add the allowed domain here
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "encrypted-tbn0.gstatic.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "wallpapercat.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "process.fs.teachablecdn.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "img.freepik.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

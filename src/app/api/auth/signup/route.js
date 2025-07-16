@@ -9,7 +9,7 @@ export const POST = async (req) => {
   try {
     connectDB();
     const { name, email, password } = await req.json();
-    console.log(name, email, password);
+    // console.log(name, email, password);
 
     // while sending response "status"- should be in second parameter only :
     if (!name || !email || !password) {
@@ -59,20 +59,20 @@ export const POST = async (req) => {
     );
 
     // set the token into cookie for that we need import cookie from next/cookie and along with use set method:
-
-    await cookies().set("token", token, {
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
       httpOnly: true,
-      secure: false,
-      maxAge: 60 * 60 * 24, // 1 day in seconds
-      path: "/", // it make the cookie is available for all across our app,if we don't mention this path mean it will be available only for this signup path it will create issue when we try to access other route like "/dashboard"
-      sameSite: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24,
+      path: "/",
     });
 
     // send the response using Next Response don't forgot to return here:
     return NextResponse.json(
       {
         success: true,
-        user: { name: newUser.name, email: newUser.email },
+        message: `${newUser.name} signup successfully`,
+        user: { name: newUser.name, email: newUser.email, id: newUser._id },
       },
       { status: 201 }
     );

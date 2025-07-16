@@ -12,6 +12,11 @@ const categorySchema = new mongoose.Schema(
       ref: "User",
       required: [true, "UserID is required"],
     },
+    categoryType: {
+      type: String,
+      enum: ["income", "expense"],
+      required: [true, "Category type is required"],
+    },
 
     emoji: {
       type: String,

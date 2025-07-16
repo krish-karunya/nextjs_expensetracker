@@ -1,16 +1,29 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import CarouselCard from "./CarouselCard";
 import Footer from "./Footer";
 import { imageData } from "@/lib/utils";
 import Marquee from "react-fast-marquee";
+import SignUpForm from "./SignUpForm";
 
-const Hero = () => {
+const Hero = ({ isOpen, setIsOpen }) => {
   return (
     <div>
+      {isOpen && (
+        <div>
+          {/* <Image
+            src={"/saving.gif"}
+            width={100}
+            height={100}
+            className="bg-indigo-200 rounded-full"
+            alt="customer-support-image"
+          /> */}
+          <SignUpForm isOpen={isOpen} setIsOpen={setIsOpen} />
+        </div>
+      )}
       <motion.div
         className="fixed w-16 md:w-24 right-0  bottom-4 md:right-6 md:bottom-8 z-50"
         initial={{ opacity: 0 }}
@@ -27,7 +40,11 @@ const Hero = () => {
           alt="customer-support-image"
         />
       </motion.div>
-      <section className="bg-white lg:grid lg:h-screen lg:place-content-center">
+
+      <section
+        className="bg-white lg:grid lg:h-screen lg:place-content-center"
+        onClick={() => setIsOpen(false)}
+      >
         <div className="flex items-center mb-20 justify-between gap-48 w-full">
           <motion.div
             className="max-w-prose  text-left p-10 bg-indigo-50 rounded-2xl "
@@ -99,6 +116,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 3 }}
+        onClick={() => setIsOpen(false)}
       >
         {/*we can directly mention the path here  */}
         <Image
@@ -109,7 +127,7 @@ const Hero = () => {
           className="w-full h-auto"
         />
       </motion.section>
-      <section className="h-full mt-20">
+      <section className="h-full mt-20" onClick={() => setIsOpen(false)}>
         <h1 className="text-center text-3xl font-bold text-indigo-500">
           Testimonial Section
         </h1>

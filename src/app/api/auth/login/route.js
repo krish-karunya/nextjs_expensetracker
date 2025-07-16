@@ -43,19 +43,19 @@ export async function POST(request) {
       { expiresIn: "1d" }
     );
 
-    await cookies().set("token", token, {
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
       httpOnly: true,
-      secure: false,
-      maxAge: 60 * 60 * 24, // 1 day in seconds
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24,
       path: "/",
-      sameSite: true,
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "Logged in successfully",
-        user: { name: user.name, email: user.email },
+        message: `${user.name} logged in successfully`,
+        user: { name: user.name, email: user.email, id: user._id },
       },
       { status: 200 }
     );

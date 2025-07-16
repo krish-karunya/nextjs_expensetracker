@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
-  const { id: categoryId } = params;
+  const { id: categoryId } = await params;
   try {
     await connectDB();
     // Check the ID is valid or not :
@@ -40,6 +40,14 @@ export async function PUT(req, { params }) {
       );
     }
 
+    // User Not allow to edit Date :
+    if (updatedIncome.date) {
+      return NextResponse.json({
+        success: false,
+        message: "Date field not allowed to edit",
+      });
+    }
+
     const oldIncome = await Income.findById(incomeId);
 
     if (!oldIncome) {
@@ -52,53 +60,47 @@ export async function PUT(req, { params }) {
       );
     }
 
-    let oldDate = new Date(oldIncome.date);
-    let oldAmount = oldIncome.amount;
-    let oldDay = oldDate.getDate();
-    let oldMonth = oldDate.getMonth() + 1;
-    let oldYear = oldDate.getFullYear();
+    let oldAmount = Number(oldIncome.amount);
 
-    const updateDate = new Date(updatedIncome.date);
-    let newAmount = updateDate.amount;
-    let newDay = updateDate.getDate();
-    let newMonth = updateDate.getMonth() + 1;
-    let newYear = updateDate.getFullYear();
+    let newAmount = Number(updatedIncome.amount);
 
-    // Revert old income amount from old month history
-    await MonthHistory.findOneAndUpdate(
-      {
-        userId: oldIncome.userId,
-        year: oldYear,
-        month: oldMonth,
-        date: oldDay,
-      },
-      { $inc: { income: -oldAmount } }
-    );
+    if (newAmount) {
+      // Revert old income amount from old month history
+      await MonthHistory.findOneAndUpdate(
+        {
+          userId: oldIncome.userId,
+          year: oldIncome.year,
+          month: oldIncome.month,
+          date: oldIncome.date,
+        },
+        { $inc: { income: -oldAmount } }
+      );
 
-    //  Add new income amount to new month history (upsert in case not exists)
-    await MonthHistory.findOneAndUpdate(
-      {
-        userId: oldIncome.userId,
-        year: newYear,
-        month: newMonth,
-        date: newDay,
-      },
-      { $inc: { income: newAmount } },
-      { upsert: true, new: true }
-    );
+      //  Add new income amount to new month history (upsert in case not exists)
+      await MonthHistory.findOneAndUpdate(
+        {
+          userId: oldIncome.userId,
+          year: oldIncome.year,
+          month: oldIncome.month,
+          date: oldIncome.date,
+        },
+        { $inc: { income: newAmount } },
+        { upsert: true, new: true }
+      );
 
-    //  Revert old income amount from old year history
-    await YearHistory.findOneAndUpdate(
-      { userId: oldIncome.userId, year: oldYear },
-      { $inc: { income: -oldAmount } }
-    );
+      //  Revert old income amount from old year history
+      await YearHistory.findOneAndUpdate(
+        { userId: oldIncome.userId, year: oldIncome.year },
+        { $inc: { income: -oldAmount } }
+      );
 
-    // Add new income amount to new year history
-    await YearHistory.findOneAndUpdate(
-      { userId: oldIncome.userId, year: newYear },
-      { $inc: { income: newAmount } },
-      { upsert: true, new: true }
-    );
+      // Add new income amount to new year history
+      await YearHistory.findOneAndUpdate(
+        { userId: oldIncome.userId, year: oldIncome.year },
+        { $inc: { income: newAmount } },
+        { upsert: true, new: true }
+      );
+    }
 
     const income = await Income.findByIdAndUpdate(
       { _id: incomeId },

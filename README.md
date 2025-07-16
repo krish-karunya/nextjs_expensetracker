@@ -51,7 +51,7 @@
 # `Stack Justification :`
 
 - `Nextjs` - To Build the Fullstack
-- `Next-Auth` - authentication
+- `JWT` - authentication
 - `TailwindCss`- Styling
 - `mongoDB` - database to store all the data
 - `React hook form and Zod` - for validating the form

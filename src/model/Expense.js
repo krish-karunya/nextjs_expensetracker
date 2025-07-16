@@ -22,7 +22,15 @@ const expenseSchema = new mongoose.Schema(
       required: [true, "Category ID is required"],
     },
     date: {
-      type: Date,
+      type: Number,
+      required: [true, "date is required"],
+    },
+    month: {
+      type: Number,
+      required: [true, "date is required"],
+    },
+    year: {
+      type: Number,
       required: [true, "date is required"],
     },
   },

@@ -1,6 +1,10 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "./_components/Header";
+import { Toaster } from "react-hot-toast";
+import { UserContextProvider } from "../lib/userContext.jsx";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { ReactQueryProvider } from "@/lib/react-query-provider";
 
 const outfit = Outfit({
   variable: "--font-geist-sans",
@@ -16,7 +20,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} `}>
-        <main> {children}</main>
+        <UserContextProvider>
+          <SidebarProvider>
+            <ReactQueryProvider>
+              <main className="w-full">{children}</main>
+            </ReactQueryProvider>
+          </SidebarProvider>
+        </UserContextProvider>
+
+        <Toaster />
       </body>
     </html>
   );

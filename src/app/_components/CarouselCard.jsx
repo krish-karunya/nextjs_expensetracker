@@ -45,10 +45,10 @@ const CarouselCard = () => {
     return () => clearInterval(interval);
   }, [slider]);
 
-  const cards = ["Krishna", "Dharun", "Abith", "Mukesh", "charu", "Naveen"];
+  const cards = ["Krishna", "Dharun", "Abith", "Mukesh", "Naveen"];
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 mt-20 flex justify-center items-center">
+    <div className="w-full max-w-6xl mx-auto px-4 mt-20 flex justify-center items-center ">
       <div className="p-2 bg-indigo-200 rounded-full">
         <ChevronLeft />
       </div>
@@ -68,11 +68,9 @@ const CarouselCard = () => {
                 <p className="font-semibold text-lg"> {content}</p>
               </div>
 
-              <div className="text-sm w-[250px] ml-12">
+              <div className="text-sm w-[200px] ml-12 text-justify">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto,
                 quod tempore numquam, accusamus necessitatibus impedit dolorem
-                ab recusandae laborum amet excepturi? Autem deleniti quis
-                repudiandae molestias sint voluptatum magni porro aliquid sit n.
               </div>
             </div>
           </div>
