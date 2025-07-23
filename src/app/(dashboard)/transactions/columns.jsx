@@ -14,46 +14,22 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axios";
 import toast from "react-hot-toast";
-import { useUser } from "@/lib/userContext";
+// import { useUser } from "@/lib/userContext";
 
-const deleteIncome = async (id) => {
-  console.log(id);
-  console.log(typeof id);
-
-  return await axiosInstance.delete(`/income/${id}`);
-};
-const deleteExpense = async (id) => {
-  return await axiosInstance.delete(`/expense/${id}`);
+const deleteTransaction = async (id) => {
+  return axiosInstance.delete(`transaction/${id}`);
 };
 
-const useDeleteIncomeData = () => {
+const useDeleteTransaction = () => {
   const queryClient = useQueryClient();
-  const user = useUser();
-
   return useMutation({
-    mutationFn: deleteIncome,
+    mutationFn: deleteTransaction,
     onSuccess: () => {
-      toast.success("Income Data deleted Successfully");
-      queryClient.invalidateQueries(["incomeTableData"]);
-      queryClient.invalidateQueries(["totalMonthData"]);
+      toast.success("Transaction deleted successfully");
+      queryClient.invalidateQueries(["transactionData"]);
     },
-    onError: (error) => {
-      console.log("error in deleteIncome", error);
-    },
-  });
-};
-const useDeleteExpenseData = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: deleteExpense,
-    onSuccess: () => {
-      toast.success("Expense Data deleted Successfully");
-      queryClient.invalidateQueries(["expenseTableData"]);
-      queryClient.invalidateQueries(["totalMonthData"]);
-    },
-    onError: (error) => {
-      console.log("error in deleteExpense", error);
+    onError: (err) => {
+      console.log("error in transaction delete API", err);
     },
   });
 };
@@ -77,7 +53,7 @@ export const columns = [
     id: "date", // Required when header is JSX
     header: () => <div className="text-left">Date</div>,
     cell: ({ row }) => {
-      console.log(row);
+      // console.log(row);
 
       // // Extract individual fields
       const isoString = row.original.transactionDate;
@@ -130,29 +106,12 @@ export const columns = [
     id: "actions",
     cell: ({ row }) => {
       const payment = row.original;
-
-      const deleteIncomeMutation = useDeleteIncomeData();
-      const deleteExpenseMutation = useDeleteExpenseData();
+      const deleteTransactionRow = useDeleteTransaction();
 
       const handleClick = (data) => {
         console.log(data.original);
         console.log(data.original._id);
-
-        switch (data.original.type) {
-          case "income":
-            console.log("this is income");
-            deleteIncomeMutation.mutate(data.original._id);
-            break;
-
-          case "expense":
-            console.log("this is expense");
-            deleteExpenseMutation.mutate(data.original._id);
-            break;
-
-          default:
-            console.log("invalid ID");
-            break;
-        }
+        deleteTransactionRow.mutate(data.original._id);
       };
 
       return (
@@ -165,10 +124,11 @@ export const columns = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
             <DropdownMenuSeparator />
-            {/* onClick={() => handleClick(row)} */}
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => handleClick(row)}>
+              Delete
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>Cancel</DropdownMenuItem>
           </DropdownMenuContent>

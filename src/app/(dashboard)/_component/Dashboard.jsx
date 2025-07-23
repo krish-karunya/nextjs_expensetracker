@@ -89,7 +89,14 @@ export function ChartBarMultiple({ dashboardYear, dashBoardRefetch }) {
 
       <CardContent>
         {/* ChartContainer can provide styling/context */}
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+        <ChartContainer
+          config={chartConfig}
+          className="h-[300px] w-full"
+          style={{
+            contentVisibility: "auto",
+            containIntrinsicSize: "300px", // reserve space
+          }}
+        >
           <BarChart accessibilityLayer data={newData}>
             {/* Grid lines (horizontal only) */}
             <CartesianGrid vertical={true} />
@@ -118,21 +125,21 @@ export function ChartBarMultiple({ dashboardYear, dashBoardRefetch }) {
               fill="oklch(44.8% 0.119 151.328)"
               radius={4}
               className="cursor-pointer"
-              barSize={34}
+              barSize={24}
             />{" "}
             <Bar
               dataKey="expense"
               fill="oklch(44.4% 0.177 26.899)"
               radius={4}
               className="cursor-pointer"
-              barSize={34}
+              barSize={24}
             />
             <Bar
               dataKey="balance"
               fill="oklch(58.5% 0.233 277.117)"
               radius={4}
               className="cursor-pointer"
-              barSize={34}
+              barSize={24}
             />
             <Legend />
           </BarChart>

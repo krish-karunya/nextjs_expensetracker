@@ -207,21 +207,24 @@ const page = () => {
               Expense by category
             </h1>
             {/* expense */}
-            <div className="flex-1 bg-gray-100 p-5 rounded-lg shadow-lg w-full max-h-52 overflow-scroll overflow-x-hidden">
-              {expenseList?.length == 0 && (
-                <div className="mt-6 ml-6 font-semibold text-gray-800">
-                  No expense data for this month
-                </div>
-              )}
-              {expenseList?.map((data) => (
-                <div className="mt-2 " key={data._id}>
-                  <div className="flex justify-between font-semibold text-gray-200 bg-gray-500 py-2 rounded px-4 ">
-                    <span>{data.description}</span>
-                    <span>${data.amount}</span>
+            <div className="flex-1 bg-gray-100 p-5 rounded-lg shadow-lg w-full h-56 max-h-52 overflow-scroll overflow-x-hidden">
+              <div>
+                {" "}
+                {expenseList?.length == 0 && (
+                  <div className="mt-6 ml-6 font-semibold text-gray-800">
+                    No expense data for this month
                   </div>
-                  {/* <Progress value={80} bgcolor={"bg-red-800"} /> */}
-                </div>
-              ))}
+                )}
+                {expenseList?.map((data) => (
+                  <div className="mt-2 " key={data._id}>
+                    <div className="flex justify-between font-semibold text-gray-200 bg-gray-500 py-2 rounded px-4  max-h-52 ">
+                      <span>{data.description}</span>
+                      <span>${data.amount}</span>
+                    </div>
+                    {/* <Progress value={80} bgcolor={"bg-red-800"} /> */}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -229,18 +232,6 @@ const page = () => {
         <div>
           <div className="mb-4 flex items-center justify-end gap-4 text-xl text-gray-700 font-semibold">
             <div className="flex items-center gap-2">
-              {/* <motion.div
-                animate={{ x: [-5, -15, 0] }} // Bounce: up and down
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  ease: "easeInOut",
-                }}
-                className="text-3xl"
-              >
-                👈
-              </motion.div> */}
               <span className="mt-2">
                 Select here to view the yearly report {`-`}
               </span>

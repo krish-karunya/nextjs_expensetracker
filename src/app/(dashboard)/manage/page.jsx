@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { IncomeCategory } from "./_component/IncomeCategory";
 import { ExpenseCategory } from "./_component/ExpenseCategory";
 import { useQuery } from "@tanstack/react-query";
@@ -45,12 +45,16 @@ const ManagePage = () => {
       </div>
       <div className="mt-8 relative">
         <div className="  p-2 rounded-lg shadow-2xl shadow-indigo-300">
-          <IncomeCategory incomeCategory={incomeCategory} />
+          <Suspense fallback={<p>Loading lazy component...</p>}>
+            <IncomeCategory incomeCategory={incomeCategory} />
+          </Suspense>
         </div>
 
         <hr className="mt-4 bg-gray-600" />
         <div className="  p-2 rounded-lg mt-4 shadow-2xl shadow-indigo-400">
-          <ExpenseCategory expenseCategory={expenseCategory} />
+          <Suspense fallback={<p>Loading lazy component...</p>}>
+            <ExpenseCategory expenseCategory={expenseCategory} />
+          </Suspense>
         </div>
       </div>
     </div>

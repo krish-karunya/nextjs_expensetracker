@@ -37,5 +37,5 @@ export const middleware = async (req) => {
 // here we need to mention the which are the route to be protected route :
 // Basically in this middleware we need to mention the path of frontend which we want to protect:
 export const config = {
-  matcher: ["/dashboard/:path*"], // protect these routes
+  matcher: ["/dashboard/:path*", "/transactions/:path*", "/manage/:path*"], // protect these routes
 };

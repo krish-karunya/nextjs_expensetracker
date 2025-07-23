@@ -1,6 +1,9 @@
+import { format } from "date-fns";
 import xlsx from "json-as-xlsx";
 
 export function downloadToExcel(data) {
+  console.log("data-from-excel", data);
+
   let columns = [
     {
       sheet: "IncomeAndExpenseReport",
@@ -8,10 +11,10 @@ export function downloadToExcel(data) {
         { label: "CategoryName", value: "categoryName" },
         {
           label: "Date",
-          value: (row) => `${row.date}/${row.month}/${row.year}`,
+          value: (row) => format(row.transactionDate, "yyyy-MM-dd"),
         },
         { label: "Description", value: "description" },
-        { label: "Type", value: "type" },
+        { label: "Type", value: "transactionType" },
         { label: "Amount", value: "amount" },
       ],
       content: data,

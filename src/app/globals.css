@@ -101,9 +101,3 @@
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
-
-.group-data-\[collapsible\=icon\]\:p-2\! {
-  &:is(:where(.group)[data-collapsible="icon"] *) {
-    padding: calc(var(--spacing) * 1) !important;
-  }
-}

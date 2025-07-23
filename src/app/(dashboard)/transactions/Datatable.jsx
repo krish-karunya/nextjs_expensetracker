@@ -85,7 +85,7 @@ export function DataTable({ columns, data }) {
               <DropdownMenuItem
                 onClick={() => {
                   setSelectedType("Income");
-                  table.getColumn("type")?.setFilterValue("Income");
+                  table.getColumn("transactionType")?.setFilterValue("Income");
                 }}
               >
                 Income
@@ -93,7 +93,7 @@ export function DataTable({ columns, data }) {
               <DropdownMenuItem
                 onClick={() => {
                   setSelectedType("Expense");
-                  table.getColumn("type")?.setFilterValue("Expense");
+                  table.getColumn("transactionType")?.setFilterValue("Expense");
                 }}
               >
                 Expense
@@ -101,7 +101,7 @@ export function DataTable({ columns, data }) {
               <DropdownMenuItem
                 onClick={() => {
                   setSelectedType("");
-                  table.getColumn("type")?.setFilterValue(undefined);
+                  table.getColumn("transactionType")?.setFilterValue(undefined);
                 }}
               >
                 Clear Filter
